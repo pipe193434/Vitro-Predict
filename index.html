@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="description" content="Demostración del modelo Vitro-Predict para priorizar el seguimiento de cotizaciones.">
+  <meta name="description" content="Demostración de Vitro-Predict para predecir si una cotización será aprobada o rechazada.">
   <title>Vitro-Predict · Demostración del modelo</title>
   <link rel="stylesheet" href="styles.css">
 </head>
@@ -16,13 +16,13 @@
     <div id="inicio" class="hero-grid wrap">
       <div>
         <p class="eyebrow">Machine Learning I · Proyecto Final Integrador</p>
-        <h1>Una señal para decidir <em>qué cotización atender primero</em></h1>
-        <p class="lead">Random Forest ejecutado en el navegador sobre dos registros de prueba anonimizados. La salida prioriza seguimiento comercial y nunca reemplaza la decisión humana.</p>
+        <h1>Predicción de <em>aprobación de cotizaciones</em></h1>
+        <p class="lead">Random Forest ejecutado en el navegador. A partir de las variables de una cotización, estima su probabilidad y la clasifica como aprobada o rechazada.</p>
         <a class="button" href="#demo">Ejecutar demostración</a>
       </div>
       <aside class="hero-panel" aria-label="Resumen del modelo">
         <span class="live"><i></i> Modelo disponible</span>
-        <div class="score"><strong>0,38</strong><span>umbral de prioridad</span></div>
+        <div class="score"><strong>0,38</strong><span>umbral de clasificación</span></div>
         <div class="mini-grid"><div><b>0,833</b><span>Recall</span></div><div><b>0,765</b><span>ROC-AUC</span></div><div><b>100</b><span>Árboles</span></div></div>
       </aside>
     </div>
@@ -31,51 +31,47 @@
   <main>
     <section id="demo" class="section wrap">
       <div class="section-heading">
-        <div><p class="eyebrow">Inferencia verificable</p><h2>Dos ejemplos del test reservado</h2></div>
-        <p>Use un ejemplo como punto de partida, modifique las variables X y pulse calcular. El modelo devuelve la Y: probabilidad y prioridad de seguimiento.</p>
+        <div><p class="eyebrow">Demostración del modelo</p><h2>¿Será aprobada o rechazada?</h2></div>
+        <p>Ingrese la información disponible de una cotización. El modelo calculará su probabilidad de aprobación y la clasificará como aprobada o rechazada.</p>
       </div>
 
-      <div class="case-tabs" role="tablist" aria-label="Casos de demostración">
-        <button class="case-tab active" data-case="0" role="tab" aria-selected="true">Caso A · prioridad alta</button>
-        <button class="case-tab" data-case="1" role="tab" aria-selected="false">Caso B · seguimiento normal</button>
+      <div class="demo-steps">
+        <span><b>1</b> Ingresar la cotización</span><span><b>2</b> Ejecutar el modelo</span><span><b>3</b> Obtener la predicción</span>
       </div>
 
-      <div class="demo-grid">
+      <div class="demo-grid single-demo">
         <article class="input-card">
-          <div class="card-head"><div><span class="tag">Entrada anonimizada</span><h3 id="case-title">Caso A</h3></div><code id="record-id">—</code></div>
+          <div class="card-head"><div><span class="tag">Información de entrada</span><h3>Nueva cotización</h3></div></div>
           <form id="prediction-form" class="form-grid">
-            <label>Cliente<select id="cliente"></select></label>
-            <label>Precio de la cotización (COP)<input id="precio" type="number" min="0" step="1" required></label>
-            <label>Origen del precio<select id="precio_fue_imputado"><option value="0">Observado</option><option value="1">Imputado por árboles</option></select></label>
+            <label>Perfil de cliente<select id="cliente"></select></label>
+            <label>Valor de la cotización (COP)<input id="precio" type="number" min="0" step="1" required></label>
             <label>Categoría del producto<select id="categoria_producto"></select></label>
             <label>Plazo de entrega<select id="plazo"></select></label>
             <label>Vigencia de la oferta<select id="vigencia"></select></label>
-            <label>Año<input id="anio" type="number" min="2015" max="2030" required></label>
-            <label>Mes<select id="mes"><option value="1">Enero</option><option value="2">Febrero</option><option value="3">Marzo</option><option value="4">Abril</option><option value="5">Mayo</option><option value="6">Junio</option><option value="7">Julio</option><option value="8">Agosto</option><option value="9">Septiembre</option><option value="10">Octubre</option><option value="11">Noviembre</option><option value="12">Diciembre</option></select></label>
-            <label>Tipo de documento<select id="tipo_documento"></select></label>
+            <label>Fecha de cotización<input id="fecha" type="date" min="2015-01-01" max="2030-12-31" required></label>
           </form>
-          <p class="privacy">Los clientes se muestran con alias. No se publican nombres ni textos libres corporativos.</p>
-          <button id="predict" class="button wide">Calcular Y con el modelo</button>
+          <button id="predict" class="button wide">Predecir aprobación</button>
         </article>
 
         <article class="output-card" aria-live="polite">
-          <span class="tag">Salida del modelo</span>
+          <span class="tag">Predicción del modelo</span>
           <div class="gauge" id="gauge" style="--p:0deg"><div><strong id="probability">—</strong><span>probabilidad de aprobación</span></div></div>
-          <div id="decision" class="decision neutral">Esperando ejecución</div>
+          <div id="decision" class="decision neutral">Esperando cálculo</div>
           <div class="threshold"><span>0</span><div><i></i><b style="left:38%">umbral 0,38</b></div><span>1</span></div>
-          <p id="comparison" class="comparison">Seleccione un caso y ejecute la inferencia.</p>
+          <p id="comparison" class="comparison">Ingrese la información y calcule la predicción.</p>
         </article>
       </div>
+      <div class="result-key"><span><i class="key-high"></i><b>Aprobada</b> · probabilidad igual o superior a 38 %</span><span><i class="key-normal"></i><b>Rechazada</b> · probabilidad inferior a 38 %</span></div>
     </section>
 
     <section id="metodo" class="section method">
       <div class="wrap">
         <div class="section-heading"><div><p class="eyebrow">Trazabilidad</p><h2>Qué ocurre al pulsar el botón</h2></div></div>
         <ol class="steps">
-          <li><span>01</span><h3>Vector del pipeline</h3><p>Se carga el registro preprocesado sin nombres ni textos sensibles.</p></li>
+          <li><span>01</span><h3>Preparación de datos</h3><p>El formulario transforma las seis variables ingresadas del mismo modo que el modelo durante su entrenamiento.</p></li>
           <li><span>02</span><h3>100 árboles</h3><p>Cada árbol recorre sus nodos y calcula una probabilidad de clase.</p></li>
           <li><span>03</span><h3>Promedio</h3><p>Random Forest promedia las probabilidades de todos los árboles.</p></li>
-          <li><span>04</span><h3>Umbral 0,38</h3><p>Si la probabilidad lo supera, el caso recibe prioridad de seguimiento.</p></li>
+          <li><span>04</span><h3>Umbral 0,38</h3><p>La probabilidad se convierte en una predicción: aprobada o rechazada.</p></li>
         </ol>
       </div>
     </section>
@@ -84,7 +80,7 @@
       <div><p class="eyebrow">Uso responsable</p><h2>La predicción orienta; la empresa decide</h2></div>
       <div class="limit-grid">
         <p><b>No es causal.</b> El modelo reconoce asociaciones históricas y no demuestra por qué se aprueba una cotización.</p>
-        <p><b>No autoriza ni rechaza.</b> Una alerta solo modifica el orden sugerido de seguimiento.</p>
+        <p><b>Apoya la decisión.</b> La salida aprobada o rechazada es una predicción; la decisión final corresponde a la empresa.</p>
         <p><b>Requiere seguimiento.</b> Se recomienda un piloto sombra de ocho semanas antes de incorporarlo al proceso.</p>
       </div>
     </section>
