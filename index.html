@@ -32,7 +32,7 @@
     <section id="demo" class="section wrap">
       <div class="section-heading">
         <div><p class="eyebrow">Inferencia verificable</p><h2>Dos ejemplos del test reservado</h2></div>
-        <p>Elija un caso y pulse ejecutar. El sitio recorre los 100 árboles exportados del modelo final y calcula la probabilidad en su navegador.</p>
+        <p>Use un ejemplo como punto de partida, modifique las variables X y pulse calcular. El modelo devuelve la Y: probabilidad y prioridad de seguimiento.</p>
       </div>
 
       <div class="case-tabs" role="tablist" aria-label="Casos de demostración">
@@ -43,9 +43,19 @@
       <div class="demo-grid">
         <article class="input-card">
           <div class="card-head"><div><span class="tag">Entrada anonimizada</span><h3 id="case-title">Caso A</h3></div><code id="record-id">—</code></div>
-          <dl id="fields" class="fields"></dl>
-          <p class="privacy">El cliente y el texto libre del producto no se publican. La inferencia usa el vector preprocesado generado por el pipeline original.</p>
-          <button id="predict" class="button wide">Ejecutar modelo</button>
+          <form id="prediction-form" class="form-grid">
+            <label>Cliente<select id="cliente"></select></label>
+            <label>Precio de la cotización (COP)<input id="precio" type="number" min="0" step="1000" required></label>
+            <label>Origen del precio<select id="precio_fue_imputado"><option value="0">Observado</option><option value="1">Imputado por árboles</option></select></label>
+            <label>Categoría del producto<select id="categoria_producto"></select></label>
+            <label>Plazo de entrega<select id="plazo"></select></label>
+            <label>Vigencia de la oferta<select id="vigencia"></select></label>
+            <label>Año<input id="anio" type="number" min="2015" max="2030" required></label>
+            <label>Mes<select id="mes"><option value="1">Enero</option><option value="2">Febrero</option><option value="3">Marzo</option><option value="4">Abril</option><option value="5">Mayo</option><option value="6">Junio</option><option value="7">Julio</option><option value="8">Agosto</option><option value="9">Septiembre</option><option value="10">Octubre</option><option value="11">Noviembre</option><option value="12">Diciembre</option></select></label>
+            <label>Tipo de documento<select id="tipo_documento"></select></label>
+          </form>
+          <p class="privacy">Los clientes se muestran con alias. No se publican nombres ni textos libres corporativos.</p>
+          <button id="predict" class="button wide">Calcular Y con el modelo</button>
         </article>
 
         <article class="output-card" aria-live="polite">
@@ -81,6 +91,7 @@
   </main>
 
   <footer><div class="wrap"><b>Vitro-Predict</b><span>Rubén Barbosa · Manuel Bermúdez · Erika Rodríguez</span><span>Universidad EAN · 2026</span></div></footer>
+  <script src="model.js"></script>
   <script src="app.js" defer></script>
 </body>
 </html>
