@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Demostración del modelo Vitro-Predict para priorizar el seguimiento de cotizaciones.">
+  <title>Vitro-Predict · Demostración del modelo</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="hero">
+    <nav class="nav wrap" aria-label="Navegación principal">
+      <a class="brand" href="#inicio"><span class="brand-mark">V</span>Vitro-Predict</a>
+      <div class="nav-links"><a href="#demo">Demo</a><a href="#metodo">Método</a><a href="#limites">Límites</a></div>
+    </nav>
+    <div id="inicio" class="hero-grid wrap">
+      <div>
+        <p class="eyebrow">Machine Learning I · Proyecto Final Integrador</p>
+        <h1>Una señal para decidir <em>qué cotización atender primero</em></h1>
+        <p class="lead">Random Forest ejecutado en el navegador sobre dos registros de prueba anonimizados. La salida prioriza seguimiento comercial y nunca reemplaza la decisión humana.</p>
+        <a class="button" href="#demo">Ejecutar demostración</a>
+      </div>
+      <aside class="hero-panel" aria-label="Resumen del modelo">
+        <span class="live"><i></i> Modelo disponible</span>
+        <div class="score"><strong>0,38</strong><span>umbral de prioridad</span></div>
+        <div class="mini-grid"><div><b>0,833</b><span>Recall</span></div><div><b>0,765</b><span>ROC-AUC</span></div><div><b>100</b><span>Árboles</span></div></div>
+      </aside>
+    </div>
+  </header>
+
+  <main>
+    <section id="demo" class="section wrap">
+      <div class="section-heading">
+        <div><p class="eyebrow">Inferencia verificable</p><h2>Dos ejemplos del test reservado</h2></div>
+        <p>Elija un caso y pulse ejecutar. El sitio recorre los 100 árboles exportados del modelo final y calcula la probabilidad en su navegador.</p>
+      </div>
+
+      <div class="case-tabs" role="tablist" aria-label="Casos de demostración">
+        <button class="case-tab active" data-case="0" role="tab" aria-selected="true">Caso A · prioridad alta</button>
+        <button class="case-tab" data-case="1" role="tab" aria-selected="false">Caso B · seguimiento normal</button>
+      </div>
+
+      <div class="demo-grid">
+        <article class="input-card">
+          <div class="card-head"><div><span class="tag">Entrada anonimizada</span><h3 id="case-title">Caso A</h3></div><code id="record-id">—</code></div>
+          <dl id="fields" class="fields"></dl>
+          <p class="privacy">El cliente y el texto libre del producto no se publican. La inferencia usa el vector preprocesado generado por el pipeline original.</p>
+          <button id="predict" class="button wide">Ejecutar modelo</button>
+        </article>
+
+        <article class="output-card" aria-live="polite">
+          <span class="tag">Salida del modelo</span>
+          <div class="gauge" id="gauge" style="--p:0deg"><div><strong id="probability">—</strong><span>probabilidad de aprobación</span></div></div>
+          <div id="decision" class="decision neutral">Esperando ejecución</div>
+          <div class="threshold"><span>0</span><div><i></i><b style="left:38%">umbral 0,38</b></div><span>1</span></div>
+          <p id="comparison" class="comparison">Seleccione un caso y ejecute la inferencia.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="metodo" class="section method">
+      <div class="wrap">
+        <div class="section-heading"><div><p class="eyebrow">Trazabilidad</p><h2>Qué ocurre al pulsar el botón</h2></div></div>
+        <ol class="steps">
+          <li><span>01</span><h3>Vector del pipeline</h3><p>Se carga el registro preprocesado sin nombres ni textos sensibles.</p></li>
+          <li><span>02</span><h3>100 árboles</h3><p>Cada árbol recorre sus nodos y calcula una probabilidad de clase.</p></li>
+          <li><span>03</span><h3>Promedio</h3><p>Random Forest promedia las probabilidades de todos los árboles.</p></li>
+          <li><span>04</span><h3>Umbral 0,38</h3><p>Si la probabilidad lo supera, el caso recibe prioridad de seguimiento.</p></li>
+        </ol>
+      </div>
+    </section>
+
+    <section id="limites" class="section wrap limits">
+      <div><p class="eyebrow">Uso responsable</p><h2>La predicción orienta; la empresa decide</h2></div>
+      <div class="limit-grid">
+        <p><b>No es causal.</b> El modelo reconoce asociaciones históricas y no demuestra por qué se aprueba una cotización.</p>
+        <p><b>No autoriza ni rechaza.</b> Una alerta solo modifica el orden sugerido de seguimiento.</p>
+        <p><b>Requiere seguimiento.</b> Se recomienda un piloto sombra de ocho semanas antes de incorporarlo al proceso.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer><div class="wrap"><b>Vitro-Predict</b><span>Rubén Barbosa · Manuel Bermúdez · Erika Rodríguez</span><span>Universidad EAN · 2026</span></div></footer>
+  <script src="app.js" defer></script>
+</body>
+</html>
